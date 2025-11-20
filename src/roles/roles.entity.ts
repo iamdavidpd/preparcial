@@ -10,7 +10,7 @@ export class RolesEntity {
     role_name: string;
 
     @Column({ nullable: true })
-    description: string;
+    description?: string;
 
     @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
     created_at: Date;

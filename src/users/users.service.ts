@@ -36,7 +36,6 @@ export class UsersService {
         return user;
     }
 
-    // users.service.ts
     async findByEmailOrNull(email: string): Promise<UsersEntity | null> {
         return await this.usersRepository.findOne({
             where: { email },
