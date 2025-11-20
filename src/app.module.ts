@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from './users/users.entity';
 import { RolesEntity } from './roles/roles.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [UsersModule, RolesModule,
@@ -25,6 +26,7 @@ import { RolesEntity } from './roles/roles.entity';
       dropSchema: true,
       synchronize: true,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
