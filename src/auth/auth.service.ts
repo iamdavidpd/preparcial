@@ -1,4 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { RolesService } from 'src/roles/roles.service';
+import { UsersService } from 'src/users/users.service';
+import { RegisterAuthDTO } from './dto/register-auth.dto';
+import bcrypt from 'node_modules/bcryptjs';
+import { BusinessError, BusinessLogicException } from 'src/shared/errors/business-errors';
 
 @Injectable()
-export class AuthService {}
+export class AuthService {
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly rolesService: RolesService,
+        private readonly jwtService: JwtService
+    ){}
+
+    async register(registerDTO: RegisterAuthDTO){
+        const { email, password, name, phone } = registerDTO;
+
+        const existing = await this.usersService.findByEmail(email);
+        if (existing){
+            throw new BusinessLogicException('Email ya registrado', BusinessError.CONFLICT);
+        }
+
+        const hashedPass = await bcrypt.hash(password, 25);
+
+        const user = await this.usersService.create({
+            email, password:hashedPass, name, phone
+        });
+
+        return {
+            message: 'Usuario registrado con exito',
+            userId: user.id
+        }
+    }
+}

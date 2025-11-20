@@ -16,7 +16,7 @@ export class UsersEntity {
     name: string;
 
     @Column({ nullable: true })
-    phone: string;
+    phone?: string;
 
     @Column({ default: true })
     is_active: boolean;

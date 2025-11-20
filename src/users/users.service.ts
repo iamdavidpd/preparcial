@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from './users.entity';
 import { Repository } from 'typeorm';
 import { BusinessLogicException, BusinessError } from 'src/shared/errors/business-errors';
+import { RegisterAuthDTO } from 'src/auth/dto/register-auth.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,8 +20,12 @@ export class UsersService {
         return user;
     }
 
-    async create(user: UsersEntity): Promise<UsersEntity> {
-        return await this.usersRepository.save(user);
+    async create(data: RegisterAuthDTO): Promise<UsersEntity> {
+        const user = this.usersRepository.create({
+            ...data,
+            is_active: true
+        })
+        return user
     }
 
     async findByEmail(email: string): Promise<UsersEntity> {

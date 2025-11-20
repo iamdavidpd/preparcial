@@ -11,7 +11,6 @@ export class RegisterAuthDTO {
     @IsString()
     name: string;
 
-    @IsString()
     @IsOptional()
     phone?: string;
 }
