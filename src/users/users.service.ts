@@ -25,7 +25,7 @@ export class UsersService {
             ...data,
             is_active: true
         })
-        return user
+        return await this.usersRepository.save(user);
     }
 
     async findByEmail(email: string): Promise<UsersEntity> {
@@ -35,4 +35,12 @@ export class UsersService {
 
         return user;
     }
+
+    // users.service.ts
+    async findByEmailOrNull(email: string): Promise<UsersEntity | null> {
+        return await this.usersRepository.findOne({
+            where: { email },
+            relations: ['roles'],
+    });
+}
 }
