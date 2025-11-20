@@ -1,5 +1,7 @@
 import { RolesEntity } from "../roles/roles.entity";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AppointmentsEntity } from "../appointments/appointments.entity";
+
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'users' })
 export class UsersEntity {
@@ -33,5 +35,8 @@ export class UsersEntity {
         inverseJoinColumn: { name: 'role_id', referencedColumnName: 'id' }
     })
     roles: RolesEntity[];
+
+    @OneToMany(() => AppointmentsEntity, (app) => app.user)
+    appoints: AppointmentsEntity[];
 
 }

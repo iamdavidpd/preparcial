@@ -11,9 +11,10 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/roles/roles.guard';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { AppointmentsModule } from './appointments/appointments.module';
 
 @Module({
-  imports: [UsersModule, RolesModule,
+  imports: [UsersModule, RolesModule, AppointmentsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env'
@@ -30,6 +31,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
       synchronize: false,
     }),
     AuthModule,
+    AppointmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
