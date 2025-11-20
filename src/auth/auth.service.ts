@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { RolesService } from 'src/roles/roles.service';
 import { UsersService } from 'src/users/users.service';
@@ -32,5 +32,34 @@ export class AuthService {
             message: 'Usuario registrado con exito',
             userId: user.id
         }
+    }
+
+    async validateUser(email: string, passwordP: string){
+        const user = await this.usersService.findByEmail(email);
+
+        if(!user){
+            throw new BusinessLogicException('Credenciales incorrectas', BusinessError.UNAUTHORIZED);
+        }
+
+        const isMatch = await bcrypt.compare(passwordP, user.password);
+        if(!isMatch){
+            throw new BusinessLogicException('Credenciales incorrectas', BusinessError.UNAUTHORIZED);
+        }
+
+        return user;
+    }
+
+    async login(email: string, passwordP: string){
+        const user = await this.validateUser(email, passwordP);
+
+        const payload = {
+            id: user.id,
+            email: user.email,
+            roles: user.roles.map(r => r.role_name)
+        };
+
+        const access_token = await this.jwtService.signAsync(payload);
+
+        return { access_token };
     }
 }
