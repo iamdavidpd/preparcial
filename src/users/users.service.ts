@@ -26,7 +26,7 @@ export class UsersService {
     async findByEmail(email: string): Promise<UsersEntity> {
         const user = await this.usersRepository.findOne({ where: {email}, relations: ["roles"] });
         if (!user)
-            throw new BusinessLogicException("The user with the given id was not found", BusinessError.NOT_FOUND);
+            throw new BusinessLogicException("The user with the given email was not found", BusinessError.NOT_FOUND);
 
         return user;
     }
